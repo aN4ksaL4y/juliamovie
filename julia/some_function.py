@@ -4,8 +4,7 @@ import requests
 from icecream import ic
 from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider
 from julia.translate import google_translator as Translator
-
-from googlesearch import search
+from julia.goo import search
 from threading import Thread
 
 class MetaData:
