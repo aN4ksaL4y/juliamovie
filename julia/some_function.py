@@ -1,5 +1,6 @@
 import base64
 import requests
+import random
 
 from icecream import ic
 from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider
@@ -22,24 +23,25 @@ class MetaData:
 			results = [v for v in r.json()["result"]]
 			self.data["results"] = results
 
-			# ic(self.data)
+			# ic(self.data)o
 			return self.data
 		except Exception as e:
 			return e
 
+def fetch_movie_url(url: str='', query: str=''):
+	keyword = f"site:{url} intext:{query}"
+
+	try:
+		r = search(keyword)
+		return r
+	except:
+		return None
+
 def search_movie_url(query: str=''):
 	urls = []
 
-	for url in current_movie_provider:
-
-		keyword = f"site:{url} intext:{query}"
-		try:
-			r = search(keyword)
-			urls.append(r[0])
-		except:
-			pass
-
-	urls = list(dict.fromkeys(urls))
+	url = random.choice(current_movie_provider)
+	urls = fetch_movie_url(url = url, query = query)
 	return urls
 
 def get_filename(belakang):
