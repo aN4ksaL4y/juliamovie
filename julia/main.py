@@ -12,7 +12,7 @@ from threading import Thread
 from prettytable import PrettyTable
 from icecream import ic
 from julia.conf import allowed_chat, API_KEY
-from julia.some_function import send_video, send_movie
+from julia.some_function import send_video, send_movie, search_movie_url
 from telegram import *
 from telegram.ext import *
 
@@ -22,6 +22,8 @@ maintance = False
 
 def movie(update, context):
 	"""
+
+	A Function that respond when (/movie) command appear.
 	"""
 	chat_id = str(update.message.chat_id)
 	urls = [
@@ -36,24 +38,26 @@ def movie(update, context):
 		update.message.reply_text('Maintaning..')
 	elif not maintance:
 		query = ''
+		msg = update.message.reply_text("<b>Lagi nyari..</b>", parse_mode = 'HTML')
 		if '/movie' in single_text:
 			query = text.replace('/movie', '')
 			query = query.split()
 			query = '-'.join([v for v in query])
 		elif '/s' in single_text:
 			query = text.replace('/s', '')
-			query = query.split()
-			query = '-'.join([v for v in query])
+			urls = search_movie_url(query)
 
-		msg = update.message.reply_text("<b>Lagi nyari..</b>", parse_mode = 'HTML')
+			captions = "-> ".join([v for v in urls])
+			captions = f"<b>Nemu Nih</b>:\n {captions}"
+			msg.edit_text(captions, parse_mode='html')
+
 		if chat_id in allowed_chat:
 			for end in urls:
 				T = Thread(target = send_movie, name = end, kwargs = {'query' : query, 'BASE_URL' : end, 'chat_id' : chat_id})
 				T.start()
 
 		else:
-			pass
-		msg.delete()
+			msg.delete()
 	else:
 		pass
 def button(update: Update, context) -> None:

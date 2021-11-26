@@ -2,8 +2,11 @@ import base64
 import requests
 
 from icecream import ic
-from julia.conf import API_KEY, LANDING_PAGE
+from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider
 from julia.translate import google_translator as Translator
+
+from googlesearch import search
+from threading import Thread
 
 class MetaData:
 	data = {}
@@ -25,6 +28,21 @@ class MetaData:
 		except Exception as e:
 			return e
 
+def search_movie_url(query: str=''):
+	urls = []
+
+	for url in current_movie_provider:
+
+		keyword = f"site:{url} intext:{query}"
+		try:
+			r = search(keyword)
+			urls.append(r[0])
+		except:
+			pass
+
+	urls = list(dict.fromkeys(urls))
+	return urls
+
 def get_filename(belakang):
 	fname = base64.b64encode(
 		bytes(time.ctime(),
@@ -36,11 +54,14 @@ def send_photo(out_file, chat_id):
 	files = {'photo': open(out_file, 'rb')}
 	message = ('https://api.telegram.org/bot'+ API_KEY+ '/sendPhoto?chat_id=' + chat_id)
 	send = requests.post(message, files = files)
+	return send.status_code
 
 def send_text(TEXT, chat_id):
 	req = requests.post(
 		'https://api.telegram.org/bot' + API_KEY + '/sendMessage' +'?chat_id='+ chat_id + '&text=' + TEXT + '&parse_mode=HTML'
 	)
+
+	return req.status_code
 
 def send_video(file_id, chat_id, caption):
 	payload = {
@@ -59,7 +80,7 @@ def send_video(file_id, chat_id, caption):
 	}
 	r = requests.post('https://api.telegram.org/bot' + API_KEY + '/sendVideo?chat_id=' + chat_id, json=payload)
 
-	return r.text
+	return r.status_code
 
 def send_movie(query: str='', BASE_URL: str='', chat_id: str=''):
 	"""

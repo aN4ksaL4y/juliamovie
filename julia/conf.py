@@ -12,11 +12,22 @@ api_url = "http://thearq.tech"
 api_key = "UIEJKL-PYXWEK-LXSSOA-HGTBXG-ARQ"
 
 current_movie_provider = [
-"https://185.231.223.131/", # bioskopkeren
-"http://185.224.83.128/", # juragan21
-"http://85.114.138.56/",  # rebahin
-"http://103.194.171.18", # filmapik
-"http://d21.lol" # LK 21
+"185.231.223.131",
+"185.224.83.128",
+"85.114.138.56",
+"103.194.171.18",
+"51.81.238.0",
+"139.99.33.217",
+"139.99.33.192",
+"139.99.33.193",
+"d21.lol",
+"d21.fun",
+"filmapik.today",
+"movies2watch.tv",
+"feelfreedigital.com",
+"pahe.ph",
+"putlocker.how"
+""
 ]
 
 MY_USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; D6603) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.152 Mobile Safari/537.36"
