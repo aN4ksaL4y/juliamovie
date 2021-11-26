@@ -1,0 +1,4 @@
+import requests
+
+api_key= 'UIEJKL-PYXWEK-LXSSOA-HGTBXG-Aapi_url = 'http://grambuilders.tech/tmdb'
+			r= requests.post(self.api_url,headers={"X-API-KEY": self.api_key},params=self.params,timeout=2)
