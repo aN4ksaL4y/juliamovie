@@ -28,6 +28,8 @@ current_movie_provider = [
 "pahe.ph",
 ]
 
+movie_domain = ["filmapik.today", "pahe.ph", "d21.fun", "movies2watch.tv"]
+
 MY_USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; D6603) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.152 Mobile Safari/537.36"
 # API_KEY = '1900176403:AAFi6py4zNEPitI4PdUZcafdF0JlZU80IGo'
 

@@ -56,6 +56,8 @@ def movie(update, context):
 				T = Thread(target = send_movie, name = end, kwargs = {'query' : query, 'BASE_URL' : end, 'chat_id' : chat_id})
 				T.start()
 
+			msg.delete()
+
 		else:
 			msg.delete()
 	else:

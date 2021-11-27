@@ -3,7 +3,7 @@ import requests
 import random
 
 from icecream import ic
-from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider
+from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider, movie_domain
 from julia.translate import google_translator as Translator
 from julia.goo import search
 from threading import Thread
@@ -40,7 +40,7 @@ def fetch_movie_url(url: str='', query: str=''):
 def search_movie_url(query: str=''):
 	urls = []
 
-	url = random.choice(current_movie_provider)
+	url = random.choice(movie_domain)
 	urls = fetch_movie_url(url = url, query = query)
 	return urls
 
