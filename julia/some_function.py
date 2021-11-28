@@ -3,7 +3,7 @@ import requests
 import random
 
 from icecream import ic
-from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider, movie_domain
+from julia.conf import API_KEY, LANDING_PAGE, current_movie_provider, movie_domain, arq_api_key
 from julia.translate import google_translator as Translator
 from julia.goo import search
 from threading import Thread
@@ -13,12 +13,12 @@ class MetaData:
 	def __init__(self, query: str="", route: str=""):
 		self.query= query
 		self.route= route
-		self.api_key= 'UIEJKL-PYXWEK-LXSSOA-HGTBXG-ARQ'
+		self.api_key= arq_api_key
 		self.api_url = f"https://grambuilders.tech/{self.route}"
 		self.params={"query":self.query}
 	def TheMovieDataBase(self):
 		try:
-			r= requests.get(self.api_url,headers={"X-API-KEY": self.api_key},params=self.params)
+			r= requests.post(self.api_url,headers={"X-API-KEY": self.api_key},params=self.params)
 			assert r.status_code== 200, ""
 			results = [v for v in r.json()["result"]]
 			self.data["results"] = results

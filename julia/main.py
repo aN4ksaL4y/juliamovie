@@ -47,6 +47,7 @@ def movie(update, context):
 					for end in urls:
 						T = Thread(target = send_movie, name = end, kwargs = {'query' : query, 'BASE_URL' : end, 'chat_id' : chat_id})
 						T.start()
+			msg.delete()
 		elif '/s' in single_text:
 			query = text.replace('/s', '')
 			urls = search_movie_url(query)
@@ -65,31 +66,6 @@ def movie(update, context):
 			pass
 	else:
 		pass
-def button(update: Update, context) -> None:
-	query = update.callback_query
-	query.answer()
-	if query.data.split("^")[0] == "judul":
-		chat_id = query.data.split("^")[2]
-		message_id = int(query.data.split("^")[1])
-		current_id.append(message_id)
-		ic(current_id)
-		query.delete_message()
-		
-	elif query.data == "pin":
-		query.pin_message()
-
-	elif query.data.split('^')[0] == "peek":
-		title = query.data.split('^')[2]
-		title = title.replace("&", "")
-		chat_id = query.data.split('^')[1]
-		query.delete_message()
-		def create_task(title: str="", chat_id: int=None):
-			async def theAgent():
-				task = asyncio.create_task(AGENT(title, chat_id))
-				await task
-			asyncio.run(theAgent())
-		T = Thread(target = create_task, name = title, kwargs = {"title" : title, "chat_id" : int(chat_id)})
-		T.start()
 
 def handle_chat(update, context):
 	text = str(update.message.text).lower()
@@ -127,78 +103,6 @@ def start(update, context):
 	reply = InlineKeyboardMarkup(board,resize_keyboard=True,one_time_keyboard=True)
 	link = HOST + random.choice(animationLink)
 	msg = update.message.reply_animation(animation=link, reply_markup=reply, caption=captions, parse_mode='html')
-
-def feed(update, context):
-	HOST = "https://www.cnnindonesia.com"
-	SUB = '/terpopuler'
-	req = requests.get(HOST + SUB)
-	soup = BeautifulSoup(req.text,'html.parser')
-	aTag = soup.find_all("a")
-	for a in aTag:
-		href = a.get("href")
-		link = href.split('/')
-		if len(link) > 5:
-			if (link[3]) == 'accounts':
-				pass
-			else:
-				CATEGORY = link[3]
-				SUB_4 = link[4]
-				SUB_5 = link[5]
-				TITLE = SUB_5.replace('-', ' ').upper()
-				URL = (HOST +"/"+ SUB_4 +"/"+ SUB_5)
-				REQ = requests.get(URL)
-				SOUP = BeautifulSoup(REQ.text, 'html.parser')
-				img = SOUP.find_all("img")
-				HOST_AKCDN = 'akcdn.detik.net.id'
-				list = ["", "", "", "", "", "", ""]
-				count=0
-				for imgTag in img:
-					src = imgTag.get("src")
-					alt = imgTag.get("alt").upper()
-					list[count] = alt
-					count+=1
-					if not '' in list:
-						ic(list)
-						BoldText = f"<i>CNN Indonesia</i> |  |\n\n<b>- {list[1]}\n\n- {list[2]}</b>\n\n❝  <i>{list[3]}</i>  ❞\n\n- <b>{list[4]}\n\n- {list[5]}</b>"
-						board = [
-									[
-									InlineKeyboardButton("MORE",url=HOST + SUB)]
-									]
-						button = InlineKeyboardMarkup(board,resize_keyboard=True,one_time_keyboard=True)
-						update.message.reply_photo(photo=src, reply_markup=button, caption=BoldText, parse_mode='html')
-					else:
-						pass
-				break
-		else:
-			pass
-			
-def feedTwo(update, context):
-	chat_id = update.message.chat_id
-	req = requests.get("https://newsapi.org/v2/top-headlines?country=id&apiKey=1c21e0843089413693b572ea8bd26ceb")
-	LIST = ["", "", "", "", ""]
-	LISTS = []
-	for i in range(len(req.json()["articles"])):
-		SUMBER = req.json()["articles"][i]["source"]["name"]
-		JUDUL = req.json()["articles"][i]["title"]
-		URL = req.json()["articles"][i]["url"]
-		try:
-			shit_ = [SUMBER, JUDUL, URL]
-			LIST[i] = shit_
-			if "" in LIST:
-				i +=1
-			else:
-				pass
-		except:
-			pass
-			
-	for list_ in LIST:
-		source_ = list_[0]
-		feed_ = list_[1]
-		link_ = list_[2]
-		result = f"<i>{source_.split('.')[0]}</i>\n\n<b>{feed_.upper()}</b> | {source_.upper()}<a href='{link_}'> | </a>"
-		LISTS.append(result)
-	DATA = "\n\n".join([val for val in LISTS])
-	send_text(DATA, chat_id)
 	
 def remove_joiner(update, context):
 	msg_id = update.message.message_id
@@ -219,11 +123,8 @@ def main():
 
 	# handler for commands.
 	dp.add_handler(CommandHandler("start", start))
-	dp.add_handler(CallbackQueryHandler(button))
 	dp.add_handler(CommandHandler("s",movie))
 	dp.add_handler(CommandHandler("movie",movie))
-	dp.add_handler(CommandHandler("feed",feed))
-	dp.add_handler(CommandHandler("feeds",feedTwo))
 	dp.add_handler(MessageHandler(Filters.text, handle_chat))
 	dp.add_handler(MessageHandler(Filters.entity, remove_joiner))
 	dp.add_error_handler(error)
