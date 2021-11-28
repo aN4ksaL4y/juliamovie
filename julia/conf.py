@@ -1,4 +1,4 @@
-API_KEY = "2133910911:AAEkZHAZQRDklftJeAAn5QSbJnJDzE2UgG4"
+API_KEY = "1750654160:AAHTf7Iwjy7PZFwRnXiDyo9GlgXrnniT9Gg"
 LANDING_PAGE = 'https://malikamovieonline.web.app/'
 allowed_chat = [
 "-1001358629184",
