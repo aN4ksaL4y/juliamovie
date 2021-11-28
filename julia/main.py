@@ -43,23 +43,26 @@ def movie(update, context):
 			query = text.replace('/movie', '')
 			query = query.split()
 			query = '-'.join([v for v in query])
+			if chat_id in allowed_chat:
+					for end in urls:
+						T = Thread(target = send_movie, name = end, kwargs = {'query' : query, 'BASE_URL' : end, 'chat_id' : chat_id})
+						T.start()
 		elif '/s' in single_text:
 			query = text.replace('/s', '')
 			urls = search_movie_url(query)
 
-			captions = "-> ".join([v for v in urls])
-			captions = f"<b>Nemu Nih</b>:\n {captions}"
-			msg.edit_text(captions, parse_mode='html')
+			__list__ = []
+			for url in urls:
+				domain = url.split('/')[-2]
+				domain = domain.replace('-', ' ').title()
+				text = f"-> <a href='{url}'>{domain}</a>"
+				__list__.append(text)
+			captions = "\n".join([v for v in __list__])
 
-		if chat_id in allowed_chat:
-			for end in urls:
-				T = Thread(target = send_movie, name = end, kwargs = {'query' : query, 'BASE_URL' : end, 'chat_id' : chat_id})
-				T.start()
-
-			msg.delete()
+			update.message.reply_text(captions, parse_mode='html')
 
 		else:
-			msg.delete()
+			pass
 	else:
 		pass
 def button(update: Update, context) -> None:
